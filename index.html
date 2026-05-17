@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>亲爱的怡怡</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Georgia", "Noto Serif SC", serif;
+            background: url('shadow.jpg') center center / cover no-repeat;
+            background-attachment: fixed;
+            color: #fff;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        #fireworks{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+
+        .box {
+            max-width: 800px;
+            padding: 60px 40px;
+            position: relative;
+            z-index: 3;
+        }
+
+        h1 {
+            font-size: 52px;
+            color: #ff7597;
+            margin-bottom: 60px;
+            letter-spacing: 8px;
+            text-shadow: 0 0 20px rgba(255, 117, 151, 0.7);
+            font-weight: normal;
+        }
+
+        .poem {
+            font-size: 24px;
+            line-height: 2.8;
+            color: #eee;
+            margin-bottom: 70px;
+            text-align: center;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 18px 60px;
+            background: linear-gradient(45deg, #ff7597, #ff3366);
+            color: white;
+            font-size: 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 0 25px rgba(255, 117, 151, 0.5);
+            transition: all 0.3s ease;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        .btn:hover {
+            background: linear-gradient(45deg, #ff3366, #ff7597);
+            transform: scale(1.08);
+            box-shadow: 0 0 35px rgba(255, 51, 102, 0.8);
+        }
+    </style>
+</head>
+<body>
+<canvas id="fireworks"></canvas>
+
+<div class="box">
+    <h1>亲爱的怡怡</h1>
+
+    <div class="poem">
+        我喜欢你的眼睛，<br>
+        你的眼睛像伦敦早已生锈的雨天，<br>
+        雨冲淡了你眸中的神色。<br>
+        你的眼睛是无止境的雨天，<br>
+        是我生命中不可缺少的雨天。
+    </div>
+
+    <a href="wish.html" class="btn">怡怡天下第一可爱！</a>
+</div>
+
+<script>
+    const canvas = document.getElementById('fireworks');
+    const ctx = canvas.getContext('2d');
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+
+    let fireList = [];
+
+    // 鲜艳深色烟花配色
+    function getColor(){
+        const colors = ['#ff2e63','#ff477e','#ff3366','#ffd000','#36d1dc','#9b59b6','#2ed573'];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    // 只升空 不炸开
+    function Fire(x, y, targetY, color){
+        this.x = x;
+        this.y = y;
+        this.targetY = targetY;
+        this.color = color;
+        this.speed = 3;
+        this.live = true;
+    }
+    Fire.prototype.update = function(){
+        this.y -= this.speed;
+        // 飞到目标高度直接消失，不生成粒子炸开
+        if(this.y <= this.targetY){
+            this.live = false;
+        }
+    }
+    Fire.prototype.draw = function(){
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+    }
+
+    // 生成升空烟花
+    function createFire(){
+        let x = Math.random() * w;
+        let top = Math.random() * h / 2;
+        fireList.push(new Fire(x, h, top, getColor()));
+    }
+
+    function animate(){
+        ctx.clearRect(0, 0, w, h);
+        // 定时生成
+        if(Math.random() > 0.94) createFire();
+
+        for(let i = fireList.length - 1; i >= 0; i--){
+            fireList[i].update();
+            fireList[i].draw();
+            if(!fireList[i].live){
+                fireList.splice(i, 1);
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    window.onresize = function(){
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+    }
+</script>
+</body>
+</html>
