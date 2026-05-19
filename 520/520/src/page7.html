@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>怡</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:Georgia,"Noto Serif SC",serif;
+      /* 背景换成你的漫画照片 */
+      background: url('cartoon_bg.jpg') center center / cover no-repeat;
+      background-attachment: fixed;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:40px 20px;
+      position: relative;
+    }
+
+    /* 半透明白色遮罩，保证文字清晰 */
+    body::after{
+      content: '';
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.65);
+      z-index: -1;
+    }
+
+    .box {
+      max-width:800px;
+      padding:60px 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .poem {
+      font-size:24px;
+      line-height:2.5;
+      margin-bottom:60px;
+      letter-spacing:2px;
+      /* 适配照片暖色调的豆沙粉色文字 */
+      color: #7a4a5f;
+      text-shadow: 0 1px 3px rgba(255,255,255,0.8);
+    }
+
+    .btn {
+      padding:16px 50px;
+      /* 按钮也换成同色系豆沙粉 */
+      background: #b86b8c;
+      color:white;
+      font-size:18px;
+      border-radius:50px;
+      text-decoration:none;
+      font-weight:bold;
+      transition:0.3s;
+      margin:10px;
+      display:inline-block;
+      font-family: "Microsoft YaHei", sans-serif;
+      box-shadow: 0 0 15px rgba(184, 107, 140, 0.25);
+    }
+
+    .btn:hover {
+      background: #a05778;
+      transform:scale(1.05);
+    }
+
+    .back {
+      background:transparent;
+      color:#b86b8c;
+      border:2px solid #b86b8c;
+    }
+  </style>
+</head>
+<body>
+<div class="box">
+  <div class="poem">
+    要开心，要美丽，<br>
+    要保持一定时间的安静与平和。<br>
+    你依然会遇到阴天，遇到暴风雨，<br>
+    可是我们现在可以确信，<br>
+    在我们爱情的最深处，<br>
+    是坚硬发光的岩石。
+  </div>
+
+  <a href="page8.html" class="btn">点一下乐怡快快乐乐！</a>
+  <br>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>亲爱的怡怡</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            overflow: hidden;
+        }
+        /* 音乐隐藏 */
+        #bgMusic {
+            display: none;
+        }
+        /* iframe 铺满屏幕，正常显示你的主页 */
+        #pageView {
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            display: block;
+        }
+        /* 点击遮罩：只在第一次生效 */
+        #clickMask {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 音乐：完整闭合，循环播放 -->
+<audio id="bgMusic" loop>
+    <source src="sasi.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 点击层 -->
+<div id="clickMask"></div>
+
+<!-- 加载你的 main.html 主页 -->
+<iframe id="pageView" src="main.html"></iframe>
+
+<script>
+    const audio = document.getElementById('bgMusic');
+    const mask = document.getElementById('clickMask');
+    const frame = document.getElementById('pageView');
+    audio.volume = 0.5;
+
+    // 只允许播放 1 次
+    let played = false;
+
+    mask.addEventListener('click', () => {
+        if (played) return;
+
+        played = true;
+        audio.play().catch(() => {});
+
+        // 销毁点击层 → 永远不能再触发播放
+        mask.remove();
+    });
+
+    // 跳转页面函数
+    window.goPage = (url) => {
+        frame.src = url;
+    };
+</script>
+
+</body>
+</html>
