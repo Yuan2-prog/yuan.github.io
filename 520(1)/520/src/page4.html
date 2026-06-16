@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>乐怡宝宝</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:Georgia,"Noto Serif SC",serif;
+      background: url('gift_bg.jpg') center center / cover no-repeat;
+      background-attachment: fixed;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:40px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #floatBall {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body::after{
+      content: '';
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.6);
+      z-index: -1;
+    }
+
+    .box {
+      max-width:800px;
+      padding:60px 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .poem {
+      font-size:24px;
+      line-height:2.5;
+      margin-bottom:60px;
+      letter-spacing:2px;
+      color: #7a4a5f;
+      text-shadow: 0 1px 3px rgba(255,255,255,0.8);
+    }
+
+    .btn {
+      padding:16px 50px;
+      background: #b86b8c;
+      color:white;
+      font-size:18px;
+      border-radius:50px;
+      text-decoration:none;
+      font-weight:bold;
+      transition:0.3s;
+      margin:10px;
+      display:inline-block;
+      font-family: "Microsoft YaHei", sans-serif;
+      box-shadow: 0 0 15px rgba(184, 107, 140, 0.25);
+    }
+
+    .btn:hover {
+      background: #a05778;
+      transform:scale(1.05);
+    }
+
+    .back {
+      background:transparent;
+      color:#b86b8c;
+      border:2px solid #b86b8c;
+    }
+  </style>
+</head>
+<body>
+<canvas id="floatBall"></canvas>
+<div class="box">
+  <div class="poem">
+    我毕生的愿望就是<br>
+    可以和一个人达成同谋。<br>
+    我在你身上找到了这种感觉，<br>
+    同时也找到了生命的新的意义。
+  </div>
+  <a href="page5.html" class="btn">点一下乐怡台球更厉害！</a>
+  <br>
+</div>
+
+<script>
+  const canvas = document.getElementById('floatBall');
+  const ctx = canvas.getContext('2d');
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+
+  let bubbleArr = [];
+  const colorList = ['#d8a7b1','#c98ca0','#b86b8c','#e2b8c4'];
+
+  function Bubble(){
+    this.x = Math.random() * canvas.width;
+    this.y = canvas.height + 20;
+    this.r = Math.random() * 6 + 4;
+    this.speedY = Math.random() * 1 + 0.6;
+    this.speedX = (Math.random()-0.5)*0.8;
+    this.color = colorList[Math.floor(Math.random()*colorList.length)];
+    this.alpha = Math.random()*0.4+0.3;
+  }
+  Bubble.prototype.draw = function(){
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.fillStyle = this.color;
+    ctx.globalAlpha = this.alpha;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+  Bubble.prototype.move = function(){
+    this.y -= this.speedY;
+    this.x += this.speedX;
+  }
+
+  function init(){
+    if(bubbleArr.length < 25){
+      bubbleArr.push(new Bubble());
+    }
+    for(let i=0;i<bubbleArr.length;i++){
+      bubbleArr[i].move();
+      bubbleArr[i].draw();
+      if(bubbleArr[i].y < -30){
+        bubbleArr.splice(i,1);
+        i--;
+      }
+    }
+  }
+
+  function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    init();
+    requestAnimationFrame(animate);
+  }
+  animate();
+  window.onresize = function(){
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+  }
+</script>
+</body>
+</html>

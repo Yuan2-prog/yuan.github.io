@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>乖宝宝怡怡呀</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: url('hand_bg.jpg') center center / contain no-repeat;
+      background-color: #f7eeee;
+      background-attachment: fixed;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:40px 20px;
+      position: relative;
+      font-family: "Georgia", "Noto Serif SC", serif;
+      overflow: hidden;
+    }
+
+    /* 星光画布 */
+    #stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body::after{
+      content: '';
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.6);
+      z-index: -1;
+    }
+
+    .box {
+      max-width:800px;
+      padding:60px 40px;
+      position: relative;
+      z-index: 1;
+      animation: float 4s infinite ease-in-out;
+    }
+
+    /* 悬浮动画 */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .poem {
+      font-size:24px;
+      line-height:2.5;
+      margin-bottom:60px;
+      letter-spacing:2px;
+      color: #7a4a5f;
+      text-shadow: 0 0 8px rgba(255,255,255,0.5);
+    }
+
+    .btn {
+      padding:16px 50px;
+      background: #b86b8c;
+      color:white;
+      font-size:18px;
+      border-radius:50px;
+      text-decoration:none;
+      font-weight:bold;
+      transition:0.3s;
+      margin:10px;
+      display:inline-block;
+      font-family: "Microsoft YaHei", sans-serif;
+      box-shadow: 0 0 15px rgba(184, 107, 140, 0.25);
+      animation: glow 3s infinite alternate;
+    }
+
+    /* 按钮呼吸光晕 */
+    @keyframes glow {
+      from { box-shadow: 0 0 10px rgba(184,107,140,0.3); }
+      to { box-shadow: 0 0 25px rgba(184,107,140,0.5); }
+    }
+
+    .btn:hover {
+      background: #a05778;
+      transform:scale(1.05);
+    }
+
+    .back {
+      background:transparent;
+      color:#b86b8c;
+      border:2px solid #b86b8c;
+    }
+  </style>
+</head>
+
+<body>
+<canvas id="stars"></canvas>
+
+<div class="box">
+  <div class="poem">
+    我想给你打电话，告诉你天气晴朗，<br>
+    告诉你我爱你<br>
+    就像人们爱希望和爱确定一样。
+  </div>
+  <a href="page4.html" class="btn">点一下变成人！</a>
+  <br>
+
+</div>
+
+<script>
+  // 温柔星光闪烁飘落特效（不重复 不花哨）
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let stars = [];
+
+  function rand(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function createStar() {
+    return {
+      x: rand(0, canvas.width),
+      y: rand(-50, -10),
+      radius: rand(1, 3),
+      speed: rand(0.5, 1.5),
+      opacity: rand(0.4, 0.8),
+      color: '#b86b8c'
+    };
+  }
+
+  function drawStar(s) {
+    ctx.save();
+    ctx.globalAlpha = s.opacity;
+    ctx.fillStyle = s.color;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function update() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (stars.length < 40) stars.push(createStar());
+
+    for (let i = stars.length - 1; i >= 0; i--) {
+      let s = stars[i];
+      s.y += s.speed;
+      drawStar(s);
+      if (s.y > canvas.height) stars.splice(i, 1);
+    }
+    requestAnimationFrame(update);
+  }
+
+  update();
+
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+</script>
+</body>
+</html>

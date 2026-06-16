@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>怡宝宝</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:Georgia,"Noto Serif SC",serif;
+      background: url('keychain_bg.jpg') center center / cover no-repeat;
+      background-attachment: fixed;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:40px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 微光流动特效画布 */
+    #glow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body::after{
+      content: '';
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.6);
+      z-index: -1;
+    }
+
+    .box {
+      max-width:800px;
+      padding:60px 40px;
+      position: relative;
+      z-index: 1;
+      animation: softFade 3s infinite alternate ease-in-out;
+    }
+
+    /* 柔和淡入动画 */
+    @keyframes softFade {
+      0% { opacity: 0.92; }
+      100% { opacity: 1; }
+    }
+
+    .poem {
+      font-size:24px;
+      line-height:2.5;
+      margin-bottom:60px;
+      letter-spacing:2px;
+      color: #7a4a5f;
+      text-shadow: 0 0 10px rgba(255,255,255,0.4);
+    }
+
+    .btn {
+      padding:16px 50px;
+      background: #b86b8c;
+      color:white;
+      font-size:18px;
+      border-radius:50px;
+      text-decoration:none;
+      font-weight:bold;
+      transition:0.3s;
+      margin:10px;
+      display:inline-block;
+      font-family: "Microsoft YaHei", sans-serif;
+      box-shadow: 0 0 15px rgba(184, 107, 140, 0.25);
+    }
+
+    .btn:hover {
+      background: #a05778;
+      transform:scale(1.05);
+    }
+
+    .back {
+      background:transparent;
+      color:#b86b8c;
+      border:2px solid #b86b8c;
+    }
+  </style>
+</head>
+
+<body>
+<canvas id="glow"></canvas>
+
+<div class="box">
+  <div class="poem">
+    直到现在为止，<br>
+    你所爱的是我身上最好的一面。<br>
+    或许这还不是爱。<br>
+    或许只有当你<br>
+    爱我的弱点和我的缺陷的时候，<br>
+    你才真正爱我。
+  </div>
+  <a href="page6.html" class="btn">点一下乐怡篮球更厉害！</a>
+  <br>
+</div>
+
+<script>
+  // 温柔微光流动特效（全新不重复）
+  const canvas = document.getElementById('glow');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let dots = [];
+  const colors = ['#b86b8c', '#c98ca0', '#d8a7b1', '#e2b8c4'];
+
+  function rand(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function createDot() {
+    return {
+      x: rand(0, canvas.width),
+      y: rand(0, canvas.height),
+      r: rand(1, 2.5),
+      speedX: rand(-0.3, 0.3),
+      speedY: rand(-0.3, 0.3),
+      color: colors[Math.floor(rand(0, colors.length))],
+      opacity: rand(0.3, 0.6)
+    };
+  }
+
+  function drawDot(d) {
+    ctx.save();
+    ctx.globalAlpha = d.opacity;
+    ctx.fillStyle = d.color;
+    ctx.beginPath();
+    ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function update() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    while (dots.length < 60) dots.push(createDot());
+
+    dots.forEach(d => {
+      d.x += d.speedX;
+      d.y += d.speedY;
+      if (d.x < 0 || d.x > canvas.width) d.speedX *= -1;
+      if (d.y < 0 || d.y > canvas.height) d.speedY *= -1;
+      drawDot(d);
+    });
+    requestAnimationFrame(update);
+  }
+
+  update();
+
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+</script>
+</body>
+</html>
